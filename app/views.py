@@ -17,92 +17,6 @@ app.config["MAX_IMAGE_FILESIZE"] = 0.5 * 1024 * 1024
 def index():
     return render_template("public/index.html")
 
-@app.route("/about")
-def about():
-    return """
-    <h1 style='color: red;'>I'm a red H1 heading!</h1>
-    <p>This is a lovely little paragraph</p>
-    <code>Flask is <em>awesome</em></code>
-    """
-
-@app.route("/jinja")
-def jinja():
-
-    # Strings
-    my_name = "Julian"
-
-    # Integers
-    my_age = 30
-
-    # Lists
-    langs = ["Python", "JavaScript", "Bash", "Ruby", "C", "Rust"]
-
-    # Dictionaries
-    friends = {
-        "Tony": 43,
-        "Cody": 28,
-        "Amy": 26,
-        "Clarissa": 23,
-        "Wendell": 39
-    }
-
-    # Tuples
-    colors = ("Red", "Blue")
-
-    # Booleans
-    cool = True
-
-    # Classes
-    class GitRemote:
-        def __init__(self, name, description, domain):
-            self.name = name
-            self.description = description 
-            self.domain = domain
-
-        def pull(self):
-            return f"Pulling repo '{self.name}'"
-
-        def clone(self, repo):
-            return f"Cloning into {repo}"
-
-    my_remote = GitRemote(
-        name="Learning Flask",
-        description="Learn the Flask web framework for Python",
-        domain="https://github.com/Julian-Nash/learning-flask.git"
-    )
-
-    # Functions
-    def repeat(x, qty=1):
-        return x * qty
-
-    return render_template(
-        "public/jinja.html", my_name=my_name, my_age=my_age, langs=langs,
-        friends=friends, colors=colors, cool=cool, GitRemote=GitRemote, 
-        my_remote=my_remote, repeat=repeat
-    )
-
-@app.route("/sign-up", methods=["GET", "POST"])
-def sign_up():
-
-    if request.method == "POST":
-        # print(request.url)
-        username = request.form.get("username")
-        email = request.form.get("email")
-        password = request.form.get("password")
-
-        # Alternatively
-
-        # username = request.form["username"]
-        # email = request.form["email"]
-        # password = request.form["password"]
-
-        # return redirect(request.url)
-        return jsonify({'name': username,
-                        'email': email,
-                        'password': password
-                        })
-    else:
-        return render_template("public/sign_up.html")
 
 def allowed_image(filename):
     
@@ -153,6 +67,7 @@ def upload_image():
                     detector = ObjectDetection()
                     detector.setModelTypeAsRetinaNet()
                     detector.setModelPath( os.path.join(execution_path , 'app/core/detect_object/detect_model/', "resnet50_coco_best_v2.0.1.h5"))
+                    # detector.setModelPath( os.path.join(execution_path , 'app/core/detect_object/detect_model/', "yolo-tiny.h5"))
                     detector.loadModel()
 
                     detections = detector.detectObjectsFromImage(input_image=uploaded_path, 
